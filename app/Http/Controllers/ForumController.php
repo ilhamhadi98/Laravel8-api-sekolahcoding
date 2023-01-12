@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ForumResource;
+use App\Http\Resources\ForumsResource;
 use App\Http\Controllers\AuthUserTrait;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,7 +25,7 @@ class ForumController extends Controller
     {
         //
         return  ForumResource::collection(
-            Forum::with('user')->paginate(3)
+            Forum::with('user')->withCount('comments')->paginate(3)
         );
     }
 
@@ -50,7 +51,7 @@ class ForumController extends Controller
     public function show($id)
     {
         //
-        return new ForumResource(
+        return new ForumsResource(
             Forum::with('user', 'comments.user')->find($id)
         );
         // return Forum::with('user:id,username', 'comments.user:id,username')->find($id);
