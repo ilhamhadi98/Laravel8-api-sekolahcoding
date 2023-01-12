@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+// use AuthUserTrait;
 use App\Models\Forum;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AuthUserTrait;
 use Illuminate\Support\Facades\Validator;
 
 class ForumController extends Controller
 {
+    use AuthUserTrait;
+
     public function __construct()
     {
         return auth()->shouldUse('api');
@@ -47,7 +52,9 @@ class ForumController extends Controller
     public function show($id)
     {
         //
-        return Forum::with('user:id,username')->find($id);
+        return Forum::with('user:id,username', 'comments.user:id,username')->find($id);
+
+        // get all comments too
     }
 
     public function update(Request $request, $id)
@@ -118,15 +125,15 @@ class ForumController extends Controller
         return response()->json(['message' => 'Post has been deleted!']);
     }
 
-    private function getAuthUser()
-    {
-        try {
-            return auth()->userOrFail();
-        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            response()->json(['message' => 'Not Authorized, Login First!'])->send();
-            exit;
-        }
-    }
+    // private function getAuthUser()
+    // {
+    //     try {
+    //         return auth()->userOrFail();
+    //     } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+    //         response()->json(['message' => 'Not Authorized, Login First!'])->send();
+    //         exit;
+    //     }
+    // }
 
     private function checkOwnerShip($authUser, $owner)
     {

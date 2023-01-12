@@ -11,7 +11,7 @@ class ForumComment extends Model
     use HasFactory;
 
     // fillable
-    protected $guarderd = ['id'];
+    protected $guarded = ['id'];
 
     public function user()
     {

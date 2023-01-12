@@ -2,35 +2,48 @@
 
 namespace App\Http\Controllers;
 
+// use AuthUserTrait;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\AuthUserTrait;
+
 
 class ForumCommentController extends Controller
 {
+    use AuthUserTrait;
+
     public function __construct()
     {
         return auth()->shouldUse('api');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $forumId)
     {
         $this->validateRequest();
 
-        try {
-            $user = auth()->userOrFail();
-        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            return response()->json(['message' => 'Not Authorized, Login First!']);
-        }
+        $user = $this->getAuthUser();
 
-        $user->forums()->create(
+        $user->forumComments()->create(
             [
-                'title' => request('title'),
                 'body' => request('body'),
-                'slug' => Str::slug(request('title')) . '-' . time(),
-                'category' => request('category'),
+                'forum_id' => $forumId
             ]
         );
 
-        return response()->json(['message' => 'Post Successfully Submitted']);
+        return response()->json(['message' => 'Post Successfully Comment Submitted']);
+    }
+
+    private function validateRequest()
+    {
+        $validator = Validator::make(request()->all(), [
+            'body' => 'required|min:10'
+        ]);
+
+        if ($validator->fails()) {
+            response()->json($validator->messages())->send();
+            exit;
+        }
     }
 
     public function show($id)
