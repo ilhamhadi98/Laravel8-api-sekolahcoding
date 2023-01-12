@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 // use AuthUserTrait;
+use App\Models\Forum;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\AuthUserTrait;
+use App\Models\ForumComment;
+use Illuminate\Support\Facades\Validator;
 
 
 class ForumCommentController extends Controller
@@ -31,7 +33,7 @@ class ForumCommentController extends Controller
             ]
         );
 
-        return response()->json(['message' => 'Post Successfully Comment Submitted']);
+        return response()->json(['message' => 'Comment Successfully Submitted']);
     }
 
     private function validateRequest()
@@ -46,18 +48,31 @@ class ForumCommentController extends Controller
         }
     }
 
-    public function show($id)
+    public function update(Request $request, $forumId, $commentId)
     {
-        //
+        $this->validateRequest();
+
+        $forumComment = ForumComment::find($commentId);
+
+        $this->checkOwnerShip($forumComment->user_id);
+
+        $forumComment->update(
+            [
+                'body' => request('body')
+            ]
+        );
+
+        return response()->json(['message' => 'Comment Successfully Updated']);
     }
 
-    public function update(Request $request, $id)
+    public function destroy($forumId, $commentId)
     {
-        //
-    }
+        $forumComment = ForumComment::find($commentId);
 
-    public function destroy($id)
-    {
-        //
+        $this->checkOwnerShip($forumComment->user_id);
+
+        $forumComment->delete();
+
+        return response()->json(['message' => 'Comment has been deleted!']);
     }
 }
