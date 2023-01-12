@@ -15,4 +15,15 @@ trait AuthUserTrait
             exit;
         }
     }
+
+    private function checkOwnerShip($owner)
+    {
+        $user = $this->getAuthUser();
+
+        // check ownership
+        if ($user->id != $owner) {
+            response()->json(['message' => 'Not Authorized 403'], 403)->send();
+            exit;
+        }
+    }
 }

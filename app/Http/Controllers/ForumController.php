@@ -62,7 +62,7 @@ class ForumController extends Controller
         //
         $this->validateRequest();
 
-        $user = $this->getAuthUser();
+        // $user = $this->getAuthUser();
         // try {
         //     $user = auth()->userOrFail();
         // } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
@@ -71,7 +71,7 @@ class ForumController extends Controller
 
         $forum = Forum::find($id);
 
-        $this->checkOwnerShip($user->id, $forum->user_id);
+        $this->checkOwnerShip($forum->user_id);
 
         // check ownership
         // if ($user->id != $forum->user_id) {
@@ -107,14 +107,14 @@ class ForumController extends Controller
     {
         $forum = Forum::find($id);
 
-        $user = $this->getAuthUser();
+        // $user = $this->getAuthUser();
         // try {
         //     $user = auth()->userOrFail();
         // } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
         //     return response()->json(['message' => 'Not Authorized, Login First!']);
         // }
 
-        $this->checkOwnerShip($user->id, $forum->user_id);
+        $this->checkOwnerShip($forum->user_id);
         // check ownership
         // if ($user->id != $forum->user_id) {
         //     return response()->json(['message' => 'Not Authorized 403'], 403);
@@ -135,12 +135,12 @@ class ForumController extends Controller
     //     }
     // }
 
-    private function checkOwnerShip($authUser, $owner)
-    {
-        // check ownership
-        if ($authUser != $owner) {
-            response()->json(['message' => 'Not Authorized 403'], 403)->send();
-            exit;
-        }
-    }
+    // private function checkOwnerShip($authUser, $owner)
+    // {
+    //     // check ownership
+    //     if ($authUser != $owner) {
+    //         response()->json(['message' => 'Not Authorized 403'], 403)->send();
+    //         exit;
+    //     }
+    // }
 }
