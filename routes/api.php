@@ -26,8 +26,13 @@ Route::group(['middleware' => 'api'], function ($router) {
     });
 
     Route::apiResource('forums', 'ForumController');
-    Route::apiResource('forums.comments', 'ForumCommentController');
-    // forums/{{ idforum }}/comments/{{ idcomments }}
 
+    // forums/{{ idforum }}/comments/{{ idcomments }}
+    Route::apiResource('forums.comments', 'ForumCommentController');
+
+    // Filter by Category
     Route::get('forums/tag/{tag}', 'ForumController@filterTag');
+
+    // User Profile
+    Route::get('@{username}', 'UserController@show');
 });
