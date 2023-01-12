@@ -49,12 +49,12 @@ class User extends Authenticatable implements JWTSubject
     // Relation 
     public function forums()
     {
-        return $this->hasMany(Forum::class); //satu user dapat mempunyai banyak forums
+        return $this->hasMany(Forum::class)->orderBy('id', 'desc')->limit(5); //satu user dapat mempunyai banyak forums
     }
 
     public function forumComments()
     {
-        return $this->hasMany(ForumComment::class); //satu user dapat mempunyai banyak comment
+        return $this->hasMany(ForumComment::class)->orderBy('id', 'desc')->limit(5); //satu user dapat mempunyai banyak comment
     }
 
 

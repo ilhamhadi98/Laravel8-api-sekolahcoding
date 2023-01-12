@@ -35,4 +35,5 @@ Route::group(['middleware' => 'api'], function ($router) {
 
     // User Profile
     Route::get('@{username}', 'UserController@show');
+    Route::get('@{username}/activity', 'UserController@getActivity');
 });
