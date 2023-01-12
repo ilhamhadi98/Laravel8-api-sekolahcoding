@@ -22,7 +22,7 @@ class ForumController extends Controller
     public function index()
     {
         //
-        return Forum::with('user:id,username')->get();
+        return Forum::with('user:id,username')->paginate(3);
     }
 
     public function store(Request $request)
@@ -31,11 +31,6 @@ class ForumController extends Controller
         $this->validateRequest();
 
         $user = $this->getAuthUser();
-        // try {
-        //     $user = auth()->userOrFail();
-        // } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-        //     return response()->json(['message' => 'Not Authorized, Login First!']);
-        // }
 
         $user->forums()->create(
             [
@@ -62,21 +57,9 @@ class ForumController extends Controller
         //
         $this->validateRequest();
 
-        // $user = $this->getAuthUser();
-        // try {
-        //     $user = auth()->userOrFail();
-        // } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-        //     return response()->json(['message' => 'Not Authorized, Login First!']);
-        // }
-
         $forum = Forum::find($id);
 
         $this->checkOwnerShip($forum->user_id);
-
-        // check ownership
-        // if ($user->id != $forum->user_id) {
-        //     return response()->json(['message' => 'Not Authorized 403'], 403);
-        // }
 
         $forum->update(
             [
@@ -107,40 +90,10 @@ class ForumController extends Controller
     {
         $forum = Forum::find($id);
 
-        // $user = $this->getAuthUser();
-        // try {
-        //     $user = auth()->userOrFail();
-        // } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-        //     return response()->json(['message' => 'Not Authorized, Login First!']);
-        // }
-
         $this->checkOwnerShip($forum->user_id);
-        // check ownership
-        // if ($user->id != $forum->user_id) {
-        //     return response()->json(['message' => 'Not Authorized 403'], 403);
-        // }
 
         $forum->delete();
 
         return response()->json(['message' => 'Post has been deleted!']);
     }
-
-    // private function getAuthUser()
-    // {
-    //     try {
-    //         return auth()->userOrFail();
-    //     } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-    //         response()->json(['message' => 'Not Authorized, Login First!'])->send();
-    //         exit;
-    //     }
-    // }
-
-    // private function checkOwnerShip($authUser, $owner)
-    // {
-    //     // check ownership
-    //     if ($authUser != $owner) {
-    //         response()->json(['message' => 'Not Authorized 403'], 403)->send();
-    //         exit;
-    //     }
-    // }
 }
