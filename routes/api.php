@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ForumController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,4 +28,6 @@ Route::group(['middleware' => 'api'], function ($router) {
     Route::apiResource('forums', 'ForumController');
     Route::apiResource('forums.comments', 'ForumCommentController');
     // forums/{{ idforum }}/comments/{{ idcomments }}
+
+    Route::get('forums/tag/{tag}', 'ForumController@filterTag');
 });

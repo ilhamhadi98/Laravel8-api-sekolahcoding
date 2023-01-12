@@ -23,7 +23,7 @@ class ForumController extends Controller
     public function index()
     {
         //
-        return ForumResource::collection(
+        return  ForumResource::collection(
             Forum::with('user')->paginate(3)
         );
     }
@@ -101,5 +101,12 @@ class ForumController extends Controller
         $forum->delete();
 
         return response()->json(['message' => 'Post has been deleted!']);
+    }
+
+    public function filterTag($tag)
+    {
+        return ForumResource::collection(
+            Forum::with('user')->where('category', $tag)->paginate(25)
+        );
     }
 }
