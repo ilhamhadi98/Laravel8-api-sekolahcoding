@@ -15,7 +15,7 @@ class ForumComment extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class); //satu forum hanya dimiliki satu user
+        return $this->belongsTo(User::class)->select(['id', 'username']); //satu forum hanya dimiliki satu user
     }
 
     public function forum()
